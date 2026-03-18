@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Town Map — Zona Colonial Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar nav-scroll">
+      <section class="brand-card">
+        <p class="eyebrow">Final Project B1</p>
+        <h1>Hometown Map UNICOMIGROUP</h1>
+        <p class="muted">Zona Colonial</p>
+      </section>
+
+      <section class="panel start-panel">
+        <div class="start-box">
+          <strong>Start point</strong>
+          <span>Parque Colón, Zona Colonial</span>
+        </div>
+        <div class="status-row">
+          <span id="statusPill" class="status-pill">Loading map…</span>
+          <button id="resetBtn" class="ghost-btn" type="button">Reset</button>
+        </div>
+      </section>
+
+      <section class="panel participant-panel">
+        <div class="panel-row tight">
+          <h2>Participants</h2>
+          <span id="activeGroupLabel" class="chip">All routes</span>
+        </div>
+        <div id="groupButtons" class="group-buttons"></div>
+      </section>
+
+      <section class="panel places-panel">
+        <div class="panel-row tight">
+          <div>
+            <h2>Places</h2>
+            <p class="muted small-copy">Only the nav scrolls. The map and visual card stay fixed.</p>
+          </div>
+          <button id="togglePlacesBtn" class="ghost-btn" type="button">Hide list</button>
+        </div>
+        <div id="placesWrap">
+          <div id="placesList" class="places-list"></div>
+        </div>
+      </section>
+    </aside>
+
+    <main class="map-column sticky-column">
+      <div class="map-stage">
+        <div id="map"></div>
+        <div id="legend" class="legend overlay-card"></div>
+        <div id="mapNav" class="map-nav overlay-card">
+          <div class="map-nav-top">
+            <span class="map-nav-title">Presentation controls</span>
+            <span id="presentationCounter" class="chip">0 / 0</span>
+          </div>
+          <div class="presentation-actions inside-map">
+            <button id="prevBtn" class="ghost-btn" type="button">Previous</button>
+            <button id="nextBtn" class="primary-btn" type="button">Next</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <aside class="info-column sticky-column">
+      <section class="panel hero-panel visual-panel">
+        <div class="panel-row tight">
+          <div>
+            <h2>Place card</h2>
+            <p class="muted small-copy">Photo, name, and a brief description next to the map.</p>
+          </div>
+          <span id="placeGroupBadge" class="group-badge">—</span>
+        </div>
+
+        <div id="placeHero" class="place-hero empty-state">Select a place to load the real image.</div>
+
+        <div id="placeMeta" class="place-meta hidden">
+          <div class="meta-top compact-meta">
+            <div>
+              <h3 id="placeTitle"></h3>
+              <p id="placeAddress" class="muted"></p>
+            </div>
+          </div>
+          <p id="placeDescription" class="description"></p>
+          <p id="placeSentence" class="sentence"></p>
+          <div id="photoAttribution" class="attribution"></div>
+        </div>
+      </section>
+
+      <section class="panel directions-panel slim-panel">
+        <div class="panel-row tight">
+          <div>
+            <h2>Directions</h2>
+            <p class="muted small-copy">Hidden until needed during the presentation.</p>
+          </div>
+          <button id="toggleDirectionsBtn" class="ghost-btn" type="button" aria-expanded="false">Show</button>
+        </div>
+        <div id="directionsWrap" class="hidden">
+          <ol id="directionsList" class="directions-list">
+            <li>Select a place to generate the real route.</li>
+          </ol>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
