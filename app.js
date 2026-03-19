@@ -93,6 +93,7 @@ function closeWelcomeScreen() {
 async function openPresentation() {
   if (state.appStarted) return;
   state.appStarted = true;
+  document.body.classList.remove('is-locked');
   revealAppShell();
   closeWelcomeScreen();
 
@@ -702,6 +703,14 @@ state.map = new google.maps.Map(el('map'), {
   bindFullscreenPersistence();
   syncMapNavPosition();
 
+  window.addEventListener('resize', () => {
+    if (!state.map) return;
+    const center = state.map.getCenter();
+    google.maps.event.trigger(state.map, 'resize');
+    if (center) state.map.setCenter(center);
+    syncMapNavPosition();
+  });
+
   state.geocoder = new google.maps.Geocoder();
   state.directionsService = new google.maps.DirectionsService();
 
@@ -718,5 +727,6 @@ state.map = new google.maps.Map(el('map'), {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('is-locked');
   initWelcomeScreen();
 });
