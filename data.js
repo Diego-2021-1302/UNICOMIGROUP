@@ -1,10 +1,10 @@
 window.MAP_DATA = {
   groups: {
     all: { key: 'all', label: 'All routes', color: '#64748b', owner: 'All participants' },
-    red: { key: 'red', label: 'Red', color: '#e23a3a', owner: 'Diego — Historical and Central Places' },
-    blue: { key: 'blue', label: 'Blue', color: '#2f77ff', owner: 'Jorge — Restaurants and Food Places' },
-    green: { key: 'green', label: 'Green', color: '#21a55b', owner: 'Cesar — Services' },
-    purple: { key: 'purple', label: 'Purple', color: '#8b4dff', owner: 'Yalenny — Cultural and Tourist Places' }
+    red: { key: 'red', label: 'Rojo', color: '#e23a3a', owner: 'Diego — Historical and Central Places' },
+    blue: { key: 'blue', label: 'Azul', color: '#2f77ff', owner: 'Jorge — Restaurants and Food Places' },
+    green: { key: 'green', label: 'Verde', color: '#21a55b', owner: 'Cesar — Services' },
+    purple: { key: 'purple', label: 'Morado', color: '#8b4dff', owner: 'Yalenny — Cultural and Tourist Places' }
   },
   start: {
     query: 'Parque Colón, Zona Colonial, Santo Domingo, Dominican Republic',

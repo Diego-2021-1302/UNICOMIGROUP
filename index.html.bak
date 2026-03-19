@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="Interactive My Town Map project with routes, directions, and place cards." />
   <title>My Town Map — Zona Colonial Premium</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,41 +10,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <section id="welcomeScreen" class="welcome-screen is-visible" aria-label="Welcome presentation">
-    <div class="welcome-backdrop"></div>
-    <div class="welcome-noise"></div>
-    <div class="welcome-content">
-      <p class="welcome-kicker">Group Presentation</p>
-      <h1 id="welcomeTitle" class="welcome-title">UNICOMI GROUP</h1>
-      <p id="welcomeSubtitle" class="welcome-subtitle">An interactive town map presentation with routes, directions, and places.</p>
-
-      <div class="welcome-grid">
-        <div class="welcome-main-card glass-card floating-card">
-          <div class="welcome-main-copy">
-            <span class="welcome-chip">Final Project B1</span>
-            <h2 id="welcomeProjectTitle">My Town Map</h2>
-            <p id="welcomeDescription">Discover the members of the team and enter the interactive map with a smooth animated transition.</p>
-          </div>
-          <button id="enterAppBtn" class="enter-app-btn" type="button">
-            <span>Enter presentation</span>
-            <span class="enter-arrow">→</span>
-          </button>
-        </div>
-
-        <div class="welcome-side-card glass-card">
-          <div class="panel-row tight welcome-panel-head">
-            <div>
-              <h3>Team members</h3>
-              <p class="muted small-copy">Colors and routes of each participant</p>
-            </div>
-          </div>
-          <div id="welcomeMembers" class="welcome-members"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div id="appShell" class="app-shell app-hidden" aria-hidden="true">
+  <div class="app-shell">
     <aside class="sidebar nav-scroll">
       <section class="brand-card">
         <p class="eyebrow">Final Project B1</p>

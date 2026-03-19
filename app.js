@@ -14,11 +14,102 @@ const state = {
   placesListVisible: true,
   presentationIndex: -1,
   mapType: 'roadmap',
-  fullscreenHandlerBound: false
+  fullscreenHandlerBound: false,
+  appStarted: false
 };
 
 function el(id) {
   return document.getElementById(id);
+}
+
+function getWelcomeConfig() {
+  return window.APP_CONFIG?.WELCOME || {};
+}
+
+function splitOwner(owner) {
+  const [name, role] = String(owner || '').split('—').map(part => part.trim());
+  return { name: name || owner || '', role: role || 'Route presentation' };
+}
+
+function renderWelcomeMembers() {
+  const container = el('welcomeMembers');
+  if (!container) return;
+  container.innerHTML = '';
+
+  Object.values(GROUPS)
+    .filter(group => group.key !== 'all')
+    .forEach(group => {
+      const info = splitOwner(group.owner);
+      const card = document.createElement('article');
+      card.className = 'welcome-member';
+      card.innerHTML = `
+        <span class="welcome-member-swatch" style="background:${group.color}"></span>
+        <div class="welcome-member-copy">
+          <strong>${info.name}</strong>
+          <span>${group.label} · ${info.role}</span>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+}
+
+function applyWelcomeBranding() {
+  const cfg = getWelcomeConfig();
+  const title = el('welcomeTitle');
+  const subtitle = el('welcomeSubtitle');
+  const projectTitle = el('welcomeProjectTitle');
+  const description = el('welcomeDescription');
+  const btn = el('enterAppBtn');
+
+  if (title && cfg.groupTitle) title.textContent = cfg.groupTitle;
+  if (subtitle && cfg.subtitle) subtitle.textContent = cfg.subtitle;
+  if (projectTitle && cfg.projectTitle) projectTitle.textContent = cfg.projectTitle;
+  if (description && cfg.description) description.textContent = cfg.description;
+  if (btn && cfg.buttonLabel) btn.querySelector('span').textContent = cfg.buttonLabel;
+
+  if (cfg.backgroundImage) {
+    document.documentElement.style.setProperty('--welcome-bg-image', `url("${cfg.backgroundImage}")`);
+  }
+}
+
+function revealAppShell() {
+  const appShell = el('appShell');
+  if (!appShell) return;
+  appShell.classList.remove('app-hidden');
+  appShell.classList.add('app-visible');
+  appShell.setAttribute('aria-hidden', 'false');
+}
+
+function closeWelcomeScreen() {
+  const welcome = el('welcomeScreen');
+  if (!welcome) return;
+  welcome.classList.add('is-exiting');
+  setTimeout(() => {
+    welcome.classList.remove('is-visible');
+    welcome.classList.add('is-hidden');
+  }, 950);
+}
+
+async function openPresentation() {
+  if (state.appStarted) return;
+  state.appStarted = true;
+  revealAppShell();
+  closeWelcomeScreen();
+
+  try {
+    await loadGoogleMapsScript();
+  } catch (error) {
+    console.error(error);
+    setStatus('Error');
+    setHeroEmpty('Add a valid Google Maps API key in config.js and enable Maps JavaScript API, Places API, and Directions API.');
+  }
+}
+
+function initWelcomeScreen() {
+  applyWelcomeBranding();
+  renderWelcomeMembers();
+  const btn = el('enterAppBtn');
+  if (btn) btn.addEventListener('click', openPresentation);
 }
 
 function setStatus(text) {
@@ -626,12 +717,6 @@ state.map = new google.maps.Map(el('map'), {
   }
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    await loadGoogleMapsScript();
-  } catch (error) {
-    console.error(error);
-    setStatus('Error');
-    setHeroEmpty('Add a valid Google Maps API key in config.js and enable Maps JavaScript API, Places API, and Directions API.');
-  }
+document.addEventListener('DOMContentLoaded', () => {
+  initWelcomeScreen();
 });
