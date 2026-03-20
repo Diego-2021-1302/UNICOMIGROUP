@@ -47,44 +47,50 @@
   </section>
 
   <div id="appShell" class="app-shell app-hidden" aria-hidden="true">
-    <aside class="sidebar nav-scroll">
-      <section class="brand-card">
-        <p class="eyebrow">Final Project B1</p>
-        <h1>My Town Map — Zona Colonial</h1>
-        <p class="muted"></p>
-      </section>
+    <aside class="sidebar nav-scroll" aria-label="Presentation navigation sidebar">
+      <div class="sidebar-content">
+        <header class="brand-card">
+          <p class="eyebrow">Final Project B1</p>
+          <h1>My Town Map — Zona Colonial</h1>
+          <p class="muted"></p>
+        </header>
 
-      <section class="panel start-panel">
-        <div class="start-box">
-          <strong>Start point</strong>
-          <span>Parque Colón, Zona Colonial</span>
-        </div>
-        <div class="status-row">
-          <span id="statusPill" class="status-pill">Loading map…</span>
-          <button id="resetBtn" class="ghost-btn" type="button">Reset</button>
-        </div>
-      </section>
-
-      <section class="panel participant-panel">
-        <div class="panel-row tight">
-          <h2>Participants</h2>
-          <span id="activeGroupLabel" class="chip">All routes</span>
-        </div>
-        <div id="groupButtons" class="group-buttons"></div>
-      </section>
-
-      <section class="panel places-panel">
-        <div class="panel-row tight">
-          <div>
-            <h2>Places</h2>
-            <p class="muted small-copy">Only the nav scrolls. The map and visual card stay fixed.</p>
+        <section class="panel start-panel" aria-labelledby="startPointTitle">
+          <div class="start-box">
+            <strong id="startPointTitle">Start point</strong>
+            <span>Parque Colón, Zona Colonial</span>
           </div>
-          <button id="togglePlacesBtn" class="ghost-btn" type="button">Hide list</button>
-        </div>
-        <div id="placesWrap">
-          <div id="placesList" class="places-list"></div>
-        </div>
-      </section>
+          <div class="status-row">
+            <span id="statusPill" class="status-pill">Loading map…</span>
+            <button id="resetBtn" class="ghost-btn" type="button">Reset</button>
+          </div>
+        </section>
+
+        <section class="panel participant-panel" aria-labelledby="participantsTitle">
+          <div class="panel-row tight">
+            <h2 id="participantsTitle">Participants</h2>
+            <span id="activeGroupLabel" class="chip">All routes</span>
+          </div>
+          <div class="panel-row tight participants-toolbar">
+            <p class="muted small-copy participants-copy">Show or hide the participant buttons.</p>
+            <button id="toggleParticipantsBtn" class="ghost-btn" type="button" aria-expanded="true">Hide</button>
+          </div>
+          <div id="groupButtons" class="group-buttons"></div>
+        </section>
+
+        <section class="panel places-panel" aria-labelledby="placesTitle">
+          <div class="panel-row tight">
+            <div>
+              <h2 id="placesTitle">Places</h2>
+              <p class="muted small-copy">Only the nav scrolls. The map and visual card stay fixed.</p>
+            </div>
+            <button id="togglePlacesBtn" class="ghost-btn" type="button">Hide list</button>
+          </div>
+          <div id="placesWrap">
+            <div id="placesList" class="places-list"></div>
+          </div>
+        </section>
+      </div>
     </aside>
 
     <main class="map-column sticky-column">
@@ -104,45 +110,47 @@
       </div>
     </main>
 
-    <aside class="info-column sticky-column">
-      <section class="panel hero-panel visual-panel">
-        <div class="panel-row tight">
-          <div>
-            <h2>Place card</h2>
-            <p class="muted small-copy">Photo, name, and a brief description next to the map.</p>
-          </div>
-          <span id="placeGroupBadge" class="group-badge">—</span>
-        </div>
-
-        <div id="placeHero" class="place-hero empty-state">Select a place to load the real image.</div>
-
-        <div id="placeMeta" class="place-meta hidden">
-          <div class="meta-top compact-meta">
+    <aside class="info-column sticky-column" aria-label="Selected place information">
+      <div class="info-content">
+        <section class="panel hero-panel visual-panel" aria-labelledby="placeCardTitle">
+          <div class="panel-row tight">
             <div>
-              <h3 id="placeTitle"></h3>
-              <p id="placeAddress" class="muted"></p>
+              <h2 id="placeCardTitle">Place card</h2>
+              <p class="muted small-copy">Photo, name, and a brief description next to the map.</p>
             </div>
+            <span id="placeGroupBadge" class="group-badge">—</span>
           </div>
-          <p id="placeDescription" class="description"></p>
-          <p id="placeSentence" class="sentence"></p>
-          <div id="photoAttribution" class="attribution"></div>
-        </div>
-      </section>
 
-      <section class="panel directions-panel slim-panel">
-        <div class="panel-row tight">
-          <div>
-            <h2>Directions</h2>
-            <p class="muted small-copy">Hidden until needed during the presentation.</p>
+          <div id="placeHero" class="place-hero empty-state">Select a place to load the real image.</div>
+
+          <div id="placeMeta" class="place-meta hidden">
+            <div class="meta-top compact-meta">
+              <div>
+                <h3 id="placeTitle"></h3>
+                <p id="placeAddress" class="muted"></p>
+              </div>
+            </div>
+            <p id="placeDescription" class="description"></p>
+            <p id="placeSentence" class="sentence"></p>
+            <div id="photoAttribution" class="attribution"></div>
           </div>
-          <button id="toggleDirectionsBtn" class="ghost-btn" type="button" aria-expanded="false">Show</button>
-        </div>
-        <div id="directionsWrap" class="hidden">
-          <ol id="directionsList" class="directions-list">
-            <li>Select a place to generate the real route.</li>
-          </ol>
-        </div>
-      </section>
+        </section>
+
+        <section class="panel directions-panel slim-panel" aria-labelledby="directionsTitle">
+          <div class="panel-row tight">
+            <div>
+              <h2 id="directionsTitle">Directions</h2>
+              <p class="muted small-copy">Hidden until needed during the presentation.</p>
+            </div>
+            <button id="toggleDirectionsBtn" class="ghost-btn" type="button" aria-expanded="false">Show</button>
+          </div>
+          <div id="directionsWrap" class="hidden">
+            <ol id="directionsList" class="directions-list">
+              <li>Select a place to generate the real route.</li>
+            </ol>
+          </div>
+        </section>
+      </div>
     </aside>
   </div>
 

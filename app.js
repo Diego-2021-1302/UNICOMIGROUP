@@ -12,6 +12,7 @@ const state = {
   activePlaceId: null,
   directionsVisible: false,
   placesListVisible: true,
+  participantsVisible: true,
   presentationIndex: -1,
   mapType: 'roadmap',
   fullscreenHandlerBound: false,
@@ -291,6 +292,14 @@ function setPlacesVisibility(visible) {
   state.placesListVisible = visible;
   el('placesWrap').classList.toggle('hidden', !visible);
   el('togglePlacesBtn').textContent = visible ? 'Hide list' : 'Show list';
+}
+
+function setParticipantsVisibility(visible) {
+  state.participantsVisible = visible;
+  el('groupButtons').classList.toggle('hidden', !visible);
+  const toggleBtn = el('toggleParticipantsBtn');
+  toggleBtn.textContent = visible ? 'Hide' : 'Show';
+  toggleBtn.setAttribute('aria-expanded', visible ? 'true' : 'false');
 }
 
 function groupPlaces(groupKey) {
@@ -606,6 +615,7 @@ function resetView() {
 function bindUI() {
   el('toggleDirectionsBtn').addEventListener('click', () => setDirectionsVisibility(!state.directionsVisible));
   el('togglePlacesBtn').addEventListener('click', () => setPlacesVisibility(!state.placesListVisible));
+  el('toggleParticipantsBtn').addEventListener('click', () => setParticipantsVisibility(!state.participantsVisible));
   el('resetBtn').addEventListener('click', resetView);
   el('prevBtn').addEventListener('click', () => stepPresentation(-1));
   el('nextBtn').addEventListener('click', () => stepPresentation(1));
