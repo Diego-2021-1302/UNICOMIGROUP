@@ -15,8 +15,12 @@ const state = {
   presentationIndex: -1,
   mapType: 'roadmap',
   fullscreenHandlerBound: false,
-  appStarted: false
+  appStarted: false,
+  openViaHash: false
 };
+
+let googleMapsPromise = null;
+let resizeTimer = null;
 
 function el(id) {
   return document.getElementById(id);
@@ -78,6 +82,10 @@ function revealAppShell() {
   appShell.classList.remove('app-hidden');
   appShell.classList.add('app-visible');
   appShell.setAttribute('aria-hidden', 'false');
+  requestAnimationFrame(() => {
+    appShell.style.willChange = 'opacity, transform';
+    setTimeout(() => { appShell.style.willChange = 'auto'; }, 800);
+  });
 }
 
 function closeWelcomeScreen() {
@@ -90,15 +98,32 @@ function closeWelcomeScreen() {
   }, 950);
 }
 
+function syncMapAfterLayout() {
+  if (!state.map || !window.google?.maps) return;
+  const center = state.map.getCenter();
+  google.maps.event.trigger(state.map, 'resize');
+  if (center) state.map.setCenter(center);
+  syncMapNavPosition();
+}
+
+function scheduleMapRefresh(delay = 120) {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(syncMapAfterLayout, delay);
+}
+
 async function openPresentation() {
   if (state.appStarted) return;
   state.appStarted = true;
-  document.body.classList.remove('is-locked');
+  state.openViaHash = window.location.hash === '#app';
   revealAppShell();
-  closeWelcomeScreen();
+  requestAnimationFrame(() => closeWelcomeScreen());
 
   try {
     await loadGoogleMapsScript();
+    requestAnimationFrame(() => syncMapAfterLayout());
+    if (window.location.hash !== '#app') {
+      history.replaceState(null, '', '#app');
+    }
   } catch (error) {
     console.error(error);
     setStatus('Error');
@@ -448,7 +473,9 @@ async function loadPlaces() {
   state.map.fitBounds(bounds, 70);
   updateMarkerVisibility();
   setStatus('Ready');
+  scheduleMapRefresh(80);
 }
+
 
 async function drawRouteToPlace(placeId) {
   const resolvedPlace = state.places.get(placeId);
@@ -539,7 +566,9 @@ function setActiveGroup(groupKey) {
   el('placeMeta').classList.add('hidden');
   setDirectionsVisibility(false);
   setStatus('Ready');
+  scheduleMapRefresh(80);
 }
+
 
 function stepPresentation(direction) {
   const items = groupPlaces(state.activeGroup === 'all' ? 'red' : state.activeGroup);
@@ -570,7 +599,9 @@ function resetView() {
     state.map.setZoom(16);
   }
   setStatus('Ready');
+  scheduleMapRefresh(80);
 }
+
 
 function bindUI() {
   el('toggleDirectionsBtn').addEventListener('click', () => setDirectionsVisibility(!state.directionsVisible));
@@ -581,7 +612,15 @@ function bindUI() {
 }
 
 function loadGoogleMapsScript() {
-  return new Promise((resolve, reject) => {
+  if (window.google?.maps && state.map) {
+    return Promise.resolve();
+  }
+
+  if (googleMapsPromise) {
+    return googleMapsPromise;
+  }
+
+  googleMapsPromise = new Promise((resolve, reject) => {
     const key = window.APP_CONFIG?.GOOGLE_MAPS_API_KEY;
     if (!key || key === 'YOUR_GOOGLE_MAPS_API_KEY') {
       reject(new Error('Missing Google Maps API key in config.js'));
@@ -589,7 +628,7 @@ function loadGoogleMapsScript() {
     }
 
     if (window.google?.maps) {
-      resolve();
+      bootstrapApp().then(resolve).catch(reject);
       return;
     }
 
@@ -602,12 +641,21 @@ function loadGoogleMapsScript() {
       }
     };
 
+    const existingScript = document.querySelector('script[data-google-maps="true"]');
+    if (existingScript) return;
+
     const script = document.createElement('script');
     script.async = true;
+    script.dataset.googleMaps = 'true';
     script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&loading=async&callback=initApp&v=weekly&libraries=maps,marker,places,routes`;
     script.onerror = () => reject(new Error('Google Maps JavaScript API failed to load.'));
     document.head.appendChild(script);
+  }).catch(error => {
+    googleMapsPromise = null;
+    throw error;
   });
+
+  return googleMapsPromise;
 }
 
 
@@ -703,13 +751,8 @@ state.map = new google.maps.Map(el('map'), {
   bindFullscreenPersistence();
   syncMapNavPosition();
 
-  window.addEventListener('resize', () => {
-    if (!state.map) return;
-    const center = state.map.getCenter();
-    google.maps.event.trigger(state.map, 'resize');
-    if (center) state.map.setCenter(center);
-    syncMapNavPosition();
-  });
+  window.addEventListener('resize', () => scheduleMapRefresh(120));
+  window.addEventListener('orientationchange', () => scheduleMapRefresh(220));
 
   state.geocoder = new google.maps.Geocoder();
   state.directionsService = new google.maps.DirectionsService();
@@ -729,4 +772,7 @@ state.map = new google.maps.Map(el('map'), {
 document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('is-locked');
   initWelcomeScreen();
+  if (window.location.hash === '#app') {
+    openPresentation();
+  }
 });

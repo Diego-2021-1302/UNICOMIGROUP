@@ -3,9 +3,9 @@ window.APP_CONFIG = {
   GOOGLE_MAPS_API_KEY: 'AIzaSyB4NZxymcIxOlfjtJXZidQqiFJfCQR0uBA',
   WELCOME: {
     groupTitle: 'UNICOMI GROUP',
-    projectTitle: 'My Town Map',
+    projectTitle: 'We Town Map',
     subtitle: 'Interactive English presentation with routes, colors, and places in Zona Colonial.',
-    description: 'Meet the team, then enter the animated map presentation with a smooth transition.',
+    description: '',
     backgroundImage: '',
     buttonLabel: 'Enter presentation'
   }
