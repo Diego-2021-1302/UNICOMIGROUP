@@ -230,6 +230,8 @@ a { color: inherit; }
 .map-column { min-height: 0; }
 .sidebar,
 .info-column {
+  display: flex;
+  flex-direction: column;
   height: calc(100dvh - (var(--shell-pad) * 2));
   min-height: 0;
 }
@@ -247,6 +249,16 @@ a { color: inherit; }
   min-height: 0;
 }
 .nav-scroll { overflow: hidden; }
+.sidebar { overflow: hidden; }
+.sidebar-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  scrollbar-gutter: stable;
+}
+.sidebar-content::-webkit-scrollbar { width: 10px; }
+.sidebar-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.28); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+.sidebar-content::-webkit-scrollbar-track { background: transparent; }
 .sticky-column { position: relative; top: auto; }
 
 .brand-card,
@@ -333,7 +345,8 @@ h3 { margin-bottom: 8px; font-size: 24px; }
   flex: 1 1 180px;
   margin: 0;
 }
-.group-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.group-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow: hidden; max-height: 520px; opacity: 1; transition: max-height 0.25s ease, opacity 0.25s ease, margin 0.25s ease; }
+.group-buttons.is-collapsed { max-height: 0; opacity: 0; pointer-events: none; }
 .group-btn,
 .place-btn {
   width: 100%;
@@ -568,6 +581,7 @@ h3 { margin-bottom: 8px; font-size: 24px; }
     min-height: 0;
     overflow: visible;
     padding-right: 0;
+    scrollbar-gutter: auto;
   }
   .sidebar-content::-webkit-scrollbar {
     width: 10px;

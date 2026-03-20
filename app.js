@@ -96,6 +96,7 @@ function closeWelcomeScreen() {
   setTimeout(() => {
     welcome.classList.remove('is-visible');
     welcome.classList.add('is-hidden');
+    document.body.classList.remove('is-locked');
   }, 950);
 }
 
@@ -116,6 +117,7 @@ async function openPresentation() {
   if (state.appStarted) return;
   state.appStarted = true;
   state.openViaHash = window.location.hash === '#app';
+  document.body.classList.remove('is-locked');
   revealAppShell();
   requestAnimationFrame(() => closeWelcomeScreen());
 
@@ -296,7 +298,8 @@ function setPlacesVisibility(visible) {
 
 function setParticipantsVisibility(visible) {
   state.participantsVisible = visible;
-  el('groupButtons').classList.toggle('hidden', !visible);
+  const groupButtons = el('groupButtons');
+  groupButtons.classList.toggle('is-collapsed', !visible);
   const toggleBtn = el('toggleParticipantsBtn');
   toggleBtn.textContent = visible ? 'Hide' : 'Show';
   toggleBtn.setAttribute('aria-expanded', visible ? 'true' : 'false');
